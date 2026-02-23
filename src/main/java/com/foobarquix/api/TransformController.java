@@ -1,10 +1,12 @@
 package com.foobarquix.api;
 
+import org.springframework.http.HttpStatus;
 /**
 author : Wassim MNASSER
 */
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/v1")
@@ -16,14 +18,11 @@ public class TransformController {
 		this.useCase = useCase;
 	}
 
-	@GetMapping("/transform")
-	public ResponseEntity<String> transform(@RequestParam("value") Integer value) {
-		if (value == null) {
-			throw new IllegalArgumentException("value is required");
-		}
+	@GetMapping("/v1/transform")
+	public String transform(@RequestParam("value") int value) {
 		if (value < 0 || value > 100) {
-			throw new IllegalArgumentException("value must be between 0 and 100");
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Value out of range");
 		}
-		return ResponseEntity.ok(useCase.transform(value));
+		return useCase.transform(value);
 	}
 }
