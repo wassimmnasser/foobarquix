@@ -10,6 +10,7 @@ import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.Step;
 import org.springframework.batch.core.step.builder.StepBuilder;
+import org.springframework.batch.infrastructure.support.transaction.ResourcelessTransactionManager;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.*;
@@ -24,6 +25,11 @@ author : Wassim MNASSER
 @EnableConfigurationProperties(BatchSettings.class)
 @Profile("batch")
 public class BatchJobConfig {
+	
+	@Bean PlatformTransactionManager transactionManager()
+	{
+		return new ResourcelessTransactionManager();
+	}
 
     @Bean
     public FileNumberLineReader reader(@Value("${batch.in}") Resource input) {
